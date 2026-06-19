@@ -1,0 +1,93 @@
+/* Force default Filament font (Inter) over Bonsai Theme */
+:root {
+    --font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif !important;
+}
+
+body.fi-body {
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif !important;
+}
+
+.fi-body * {
+    font-family: inherit !important;
+}
+
+/* Guava Calendar Dark Mode Fixes - Aggressive Targeting with Event Exclusion */
+html.dark .ec {
+    background-color: #09090b !important;
+    color: #ffffff !important;
+}
+
+/* Force everything except events to be transparent/dark */
+html.dark .ec *:not(.ec-event):not(.ec-event *) {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    border-color: #27272a !important; /* zinc-800 */
+}
+
+/* Apply dark background to main structural elements */
+html.dark .ec,
+html.dark .ec-body,
+html.dark .ec-header,
+html.dark .ec-day,
+html.dark .ec-sidebar,
+html.dark .ec-day-grid,
+html.dark .ec-time-grid,
+html.dark .ec-list,
+html.dark .fi-section,
+html.dark .fi-section-content {
+    background-color: #09090b !important;
+}
+
+html.dark .ec-button {
+    color: #ffffff !important;
+    background-color: #18181b !important; /* zinc-900 */
+    border: 1px solid #27272a !important; /* zinc-800 */
+}
+
+html.dark .ec-button:hover {
+    background-color: #27272a !important; /* zinc-800 */
+}
+
+html.dark .ec-button.ec-active {
+    background-color: #3f3f46 !important; /* zinc-700 */
+}
+
+/* Ensure event text remains white and bold as requested */
+html.dark .ec-event {
+    border: none !important;
+}
+
+html.dark .ec-event-body,
+html.dark .ec-event-title,
+html.dark .ec-event-time {
+    color: #ffffff !important;
+    font-weight: bold !important;
+}
+
+html.dark .ec-today-bg-color {
+    background-color: rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Override variables for deeper compatibility */
+html.dark .ec {
+    --ec-list-day-bg-color: #09090b !important;
+    --ec-event-text-color: #ffffff !important;
+    --ec-button-text-color: #ffffff !important;
+    --ec-title-text-color: #ffffff !important;
+    --ec-header-text-color: #ffffff !important;
+    --ec-body-text-color: #ffffff !important;
+    --ec-border-color: #27272a !important;
+}
+
+/* Make calendar dates look clickable */
+.ec-day {
+    cursor: pointer !important;
+}
+
+html.dark .ec-day:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.ec-day:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
