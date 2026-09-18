@@ -1,4 +1,4 @@
-# IT Service Management System
+# IT Task Management System
 
 IT Helpdesk & Task Management built with Laravel 13 + Filament v5.
 
