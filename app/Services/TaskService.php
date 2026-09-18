@@ -63,9 +63,9 @@ class TaskService
     /**
      * Update task status safely and log the transition.
      */
-    public function updateStatus(Task $task, $status, User $actor, ?string $note = null): Task
+    public function updateStatus(Task $task, $status, User $actor, ?string $note = null, \DateTimeInterface|string|null $at = null): Task
     {
-        return DB::transaction(function () use ($task, $status, $actor, $note) {
+        return DB::transaction(function () use ($task, $status, $actor, $note, $at) {
             $oldStatus = $task->status;
 
             $newStatus = $status instanceof TaskStatus
@@ -85,8 +85,8 @@ class TaskService
 
             $task->update([
                 'status'       => $newStatus->value,
-                'completed_at' => $newStatus === TaskStatus::Completed ? now() : $task->completed_at,
-                'cancelled_at' => $newStatus === TaskStatus::Cancelled ? now() : $task->cancelled_at,
+                'completed_at' => $newStatus === TaskStatus::Completed ? ($at ?? now()) : $task->completed_at,
+                'cancelled_at' => $newStatus === TaskStatus::Cancelled ? ($at ?? now()) : $task->cancelled_at,
             ]);
 
             event(new TaskStatusChanged($task, $oldStatus, $newStatus, $actor, $note));

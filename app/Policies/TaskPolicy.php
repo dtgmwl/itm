@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\TaskStatus;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -36,7 +37,9 @@ class TaskPolicy
 
     public function delete(User $user, Task $task): bool
     {
-        return ($user->hasRole('admin') || $user->isHeadDepartment()) && !$task->isTerminal();
+        // ponytail: cancelled is erasable per client request; completed stays protected
+        return ($user->hasRole('admin') || $user->isHeadDepartment())
+            && $task->status !== TaskStatus::Completed;
     }
 
     public function assign(User $user, Task $task): bool

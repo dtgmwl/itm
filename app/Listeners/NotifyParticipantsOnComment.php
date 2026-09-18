@@ -18,12 +18,18 @@ class NotifyParticipantsOnComment
         $commenterIds = TaskComment::where('task_id', $task->id)
             ->pluck('user_id');
 
+        $hods = User::role('head_department')
+            ->when($task->department_id, fn ($q) => $q->where('department_id', $task->department_id))
+            ->get();
+
         $participants = collect([$task->assignedBy, $task->assignedTo])
             ->merge($task->assignees)
             ->merge(User::whereIn('id', $commenterIds)->get())
+            ->merge($hods)
             ->filter()
             ->unique('id')
-            ->reject(fn ($user) => $user->id === $event->actor->id);
+            ->reject(fn ($user) => $user->id === $event->actor->id)
+            ->filter(fn ($user) => $user->can('view', $task));
 
         foreach ($participants as $participant) {
             $participant->notify(new NewTaskCommentNotification($task, $event->comment));

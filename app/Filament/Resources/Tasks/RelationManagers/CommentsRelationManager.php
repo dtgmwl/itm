@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Tasks\RelationManagers;
 
+use App\Events\TaskCommentAdded;
 use App\Filament\Resources\Tasks\TaskResource;
+use App\Models\TaskComment;
 use Filament\Forms\Components\Textarea;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -71,6 +73,9 @@ class CommentsRelationManager extends RelationManager
                         $data['user_id'] = auth()->id();
 
                         return $data;
+                    })
+                    ->after(function (TaskComment $record): void {
+                        event(new TaskCommentAdded($record->task, auth()->user(), $record));
                     }),
             ])
 

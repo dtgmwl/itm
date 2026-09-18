@@ -35,6 +35,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
             ->font('Inter')
+            ->viteTheme('resources/css/app.css')
             ->assets([
                 Css::make('bonsai-custom', resource_path('css/bonsai-custom.css')),
             ])

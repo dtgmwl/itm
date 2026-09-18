@@ -47,8 +47,9 @@ class Task extends Model implements Eventable
 
         // Completed tasks show on their completion date instead
         if ($this->status === TaskStatus::Completed && $this->completed_at) {
-            $actualStartDate = $this->completed_at;
-            $actualDueDate = $this->completed_at;
+            // ponytail: date-only pill; full datetime + browser tz shifted pills a day for times after 17:00 UTC
+            $actualStartDate = (clone $this->completed_at)->startOfDay();
+            $actualDueDate = (clone $this->completed_at)->startOfDay();
         } else {
             $actualStartDate = $this->start_date;
             $actualDueDate = $this->due_date;

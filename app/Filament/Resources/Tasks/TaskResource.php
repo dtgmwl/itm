@@ -69,6 +69,7 @@ class TaskResource extends Resource
                         })
                         ->default(fn($r) => $r ? $r->status->value : TaskStatus::Open->value)
                         ->required()
+                        ->live()
                         ->disableOptionWhen(fn ($value, $record) => $record && $record->status->value === $value)
                         ->helperText('Opsi dibatasi sesuai aturan SOP transisi status.'),
 
@@ -76,14 +77,21 @@ class TaskResource extends Resource
                         ->label('Catatan')
                         ->required()
                         ->maxLength(255),
+
+                    DatePicker::make('completed_date')
+                        ->label('Tanggal selesai')
+                        ->native(false)
+                        ->helperText('Kosongkan untuk memakai waktu sekarang.')
+                        ->default(now())
+                        ->maxDate(now())
+                        ->visible(fn (Get $get) => $get('status') === TaskStatus::Completed->value),
                 ]),
             ])
             ->action(function($data, $record){
                 try {
                     $svc = app(TaskService::class);
                     $status = $data['status'] instanceof TaskStatus ? $data['status'] : TaskStatus::tryFrom($data['status']);
-
-                    $svc->updateStatus($record, $status, auth()->user(), $data['note']);
+                    $svc->updateStatus($record, $status, auth()->user(), $data['note'], $data['completed_date'] ?? null);
 
                     Notification::make()->title('Progress updated')->success()->send();
 
@@ -313,6 +321,8 @@ class TaskResource extends Resource
                     ->modalContent(fn($record) => view('livewire.task-discussion-container', ['taskId' => $record->id]))
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel(false),
+
+                \Filament\Actions\DeleteAction::make(),
             ])
             ->bulkActions([]);
     }

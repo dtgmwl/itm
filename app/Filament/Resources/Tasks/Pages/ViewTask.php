@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Tasks\Pages;
 
 use App\Filament\Resources\Tasks\TaskResource;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -15,6 +16,7 @@ class ViewTask extends ViewRecord
         return [
             TaskResource::getUpdateProgressAction(),
             EditAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

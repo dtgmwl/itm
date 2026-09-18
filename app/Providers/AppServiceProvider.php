@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
 
         Volt::mount([resource_path('views/livewire')]);
 
-        if (app()->environment('production') || str_contains(config('app.url'), 'ngrok-free.dev')) {
+        if (str_starts_with((string) config('app.url'), 'https://')) {
             URL::forceScheme('https');
         }
     }
